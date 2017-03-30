@@ -1,23 +1,34 @@
 package com.whc.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by whc on 2017/3/29.
  */
-public class Student {
+@Entity
+@Table(name = "sbt_student")
+public class Student{
 
+    @Id
+    @GeneratedValue
+    @Column(name = "ID", nullable = false)
     private Integer id;
 
+    @Column(name = "NAME", nullable = false)
     private String name;
 
+    @Column(name = "AGE")
     private Integer age;
 
     /** 0,1 */
+    @Column(name = "GENDER", nullable = false)
     private Integer gender;
 
+    @Column(name = "CREATE_TIME")
     private Date createTime;
 
+    @Column(name = "UPDATE_TIME")
     private Date updateTime;
 
     public Student() {
