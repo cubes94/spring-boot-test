@@ -2,6 +2,8 @@ package com.whc;
 
 import com.whc.dao.jpa.primary.StudentJpaPrimaryRepository;
 import com.whc.dao.jpa.secondary.StudentJpaSecondaryRepository;
+import com.whc.dao.mapper.primary.StudentPrimaryMapper;
+import com.whc.dao.mapper.secondary.StudentSecondaryMapper;
 import com.whc.dao.mongo.StudentMongoRepository;
 import com.whc.model.Student;
 import com.whc.service.RedisCacheService;
@@ -55,6 +57,12 @@ public class Chapter1ApplicationTest {
 
     @Autowired
     private StudentMongoRepository studentMongoRepository;
+
+    @Autowired
+    private StudentPrimaryMapper studentPrimaryMapper;
+
+    @Autowired
+    private StudentSecondaryMapper studentSecondaryMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -124,6 +132,23 @@ public class Chapter1ApplicationTest {
         Assert.assertEquals(3, studentMongoRepository.findAll().size());
 
         Assert.assertEquals(2, studentMongoRepository.findByName("李四").getId().intValue());
+    }
+
+    @Test
+    public void testMyBatis() {
+
+        studentPrimaryMapper.deleteAll();
+        studentPrimaryMapper.insert(new Student("张三", 20, 0, new Date(), new Date()));
+        studentPrimaryMapper.insert(new Student("李四", 20, 0, new Date(), new Date()));
+        studentPrimaryMapper.insert(new Student("王五", 20, 0, new Date(), new Date()));
+        Assert.assertEquals(3, studentPrimaryMapper.selectAll().size());
+
+        studentSecondaryMapper.deleteAll();
+        studentSecondaryMapper.insert(new Student("张三", 20, 0, new Date(), new Date()));
+        studentSecondaryMapper.insert(new Student("李四", 20, 0, new Date(), new Date()));
+        studentSecondaryMapper.insert(new Student("王五", 20, 0, new Date(), new Date()));
+        Assert.assertEquals(3, studentSecondaryMapper.selectAll().size());
+
     }
 
 

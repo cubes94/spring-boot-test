@@ -24,7 +24,8 @@ import java.util.Map;
         basePackages= { "com.whc.dao.jpa.secondary" }) //设置Repository所在位置
 public class JpaSecondaryConfig {
 
-    @Autowired @Qualifier("secondaryDataSource")
+    @Autowired
+    @Qualifier("secondaryDataSource")
     private DataSource secondaryDataSource;
 
     @Bean(name = "entityManagerSecondary")

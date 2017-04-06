@@ -25,7 +25,8 @@ import java.util.Map;
         basePackages= { "com.whc.dao.jpa.primary" }) //设置Repository所在位置
 public class JpaPrimaryConfig {
 
-    @Autowired @Qualifier("primaryDataSource")
+    @Autowired
+    @Qualifier("primaryDataSource")
     private DataSource primaryDataSource;
 
     @Primary
