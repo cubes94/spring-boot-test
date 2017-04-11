@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -81,6 +82,7 @@ public class Chapter1ApplicationTest {
     }
 
     @Test
+    @Transactional(transactionManager = "secondaryDataSourceTransactionManager")
     public void testJDBC() {
 
         studentJdbcTemplatePrimaryService.create(new Student("张三", 20, 0, new Date(), new Date()));
@@ -89,7 +91,7 @@ public class Chapter1ApplicationTest {
         Assert.assertEquals(3, studentJdbcTemplatePrimaryService.getAll().size());
 
         studentJdbcTemplateSecondaryService.create(new Student("张三", 20, 0, new Date(), new Date()));
-        studentJdbcTemplateSecondaryService.create(new Student("李四", 20, 0, new Date(), new Date()));
+        studentJdbcTemplateSecondaryService.create(new Student("李四", 20, null, new Date(), new Date()));
         studentJdbcTemplateSecondaryService.create(new Student("王五", 20, 0, new Date(), new Date()));
         Assert.assertEquals(3, studentJdbcTemplateSecondaryService.getAll().size());
 
@@ -98,6 +100,7 @@ public class Chapter1ApplicationTest {
     }
 
     @Test
+    @Transactional("transactionManagerSecondary")
     public void testJPA() {
         studentJpaPrimaryRepository.save(new Student("张三", 20, 0, new Date(), new Date()));
         studentJpaPrimaryRepository.save(new Student("李四", 20, 0, new Date(), new Date()));

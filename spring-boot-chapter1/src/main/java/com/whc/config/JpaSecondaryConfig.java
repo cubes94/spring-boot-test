@@ -1,5 +1,7 @@
 package com.whc.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -24,17 +26,21 @@ import java.util.Map;
         basePackages= { "com.whc.dao.jpa.secondary" }) //设置Repository所在位置
 public class JpaSecondaryConfig {
 
+    Logger LOGGER = LoggerFactory.getLogger(JpaSecondaryConfig.class);
+
     @Autowired
     @Qualifier("secondaryDataSource")
     private DataSource secondaryDataSource;
 
     @Bean(name = "entityManagerSecondary")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE entityManagerSecondary----------------");
         return entityManagerFactorySecondary(builder).getObject().createEntityManager();
     }
 
     @Bean(name = "entityManagerFactorySecondary")
     public LocalContainerEntityManagerFactoryBean entityManagerFactorySecondary (EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE entityManagerFactorySecondary----------------");
         return builder
                 .dataSource(secondaryDataSource)
                 .properties(getVendorProperties(secondaryDataSource))
@@ -52,6 +58,7 @@ public class JpaSecondaryConfig {
 
     @Bean(name = "transactionManagerSecondary")
     PlatformTransactionManager transactionManagerSecondary(EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE transactionManagerSecondary----------------");
         return new JpaTransactionManager(entityManagerFactorySecondary(builder).getObject());
     }
 

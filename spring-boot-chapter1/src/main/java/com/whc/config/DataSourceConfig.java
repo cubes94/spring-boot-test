@@ -1,5 +1,7 @@
 package com.whc.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,11 +19,14 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig {
 
+    Logger LOGGER = LoggerFactory.getLogger(DataSourceConfig.class);
+
     @Bean(name = "primaryDataSource")
     @Qualifier("primaryDataSource")
     @Primary
     @ConfigurationProperties(prefix="spring.datasource.primary")
     public DataSource primaryDataSource() {
+        LOGGER.info("-----------------CREATE primaryDataSource----------------");
         return DataSourceBuilder.create().build();
     }
 
@@ -29,6 +34,7 @@ public class DataSourceConfig {
     @Qualifier("secondaryDataSource")
     @ConfigurationProperties(prefix="spring.datasource.secondary")
     public DataSource secondaryDataSource() {
+        LOGGER.info("-----------------CREATE secondaryDataSource----------------");
         return DataSourceBuilder.create().build();
     }
 
@@ -36,23 +42,27 @@ public class DataSourceConfig {
     @Primary
     public JdbcTemplate primaryJdbcTemplate(
             @Qualifier("primaryDataSource") DataSource dataSource) {
+        LOGGER.info("-----------------CREATE primaryJdbcTemplate----------------");
         return new JdbcTemplate(dataSource);
     }
 
     @Bean(name = "secondaryJdbcTemplate")
     public JdbcTemplate secondaryJdbcTemplate(
             @Qualifier("secondaryDataSource") DataSource dataSource) {
+        LOGGER.info("-----------------CREATE secondaryJdbcTemplate----------------");
         return new JdbcTemplate(dataSource);
     }
 
     @Bean(name = "primaryDataSourceTransactionManager")
     @Primary
     public DataSourceTransactionManager primaryDataSourceTransactionManager() {
+        LOGGER.info("-----------------CREATE primaryDataSourceTransactionManager----------------");
         return new DataSourceTransactionManager(primaryDataSource());
     }
 
     @Bean(name = "secondaryDataSourceTransactionManager")
     public DataSourceTransactionManager secondaryDataSourceTransactionManager() {
+        LOGGER.info("-----------------CREATE secondaryDataSourceTransactionManager----------------");
         return new DataSourceTransactionManager(secondaryDataSource());
     }
 

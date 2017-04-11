@@ -1,5 +1,7 @@
 package com.whc.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -25,6 +27,8 @@ import java.util.Map;
         basePackages= { "com.whc.dao.jpa.primary" }) //设置Repository所在位置
 public class JpaPrimaryConfig {
 
+    Logger LOGGER = LoggerFactory.getLogger(JpaPrimaryConfig.class);
+
     @Autowired
     @Qualifier("primaryDataSource")
     private DataSource primaryDataSource;
@@ -32,12 +36,14 @@ public class JpaPrimaryConfig {
     @Primary
     @Bean(name = "entityManagerPrimary")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE entityManagerPrimary----------------");
         return entityManagerFactoryPrimary(builder).getObject().createEntityManager();
     }
 
     @Primary
     @Bean(name = "entityManagerFactoryPrimary")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary (EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE entityManagerFactoryPrimary----------------");
         return builder
                 .dataSource(primaryDataSource)
                 .properties(getVendorProperties(primaryDataSource))
@@ -56,6 +62,7 @@ public class JpaPrimaryConfig {
     @Primary
     @Bean(name = "transactionManagerPrimary")
     public PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
+        LOGGER.info("-----------------CREATE transactionManagerPrimary----------------");
         return new JpaTransactionManager(entityManagerFactoryPrimary(builder).getObject());
     }
 
