@@ -1,4 +1,4 @@
-package com.whc.dao.mapper.secondary;
+package com.whc.dao.mapper.primary;
 
 import com.whc.model.Student;
 import org.apache.ibatis.annotations.*;
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by whc on 2017/4/6.
  */
 @Mapper
-public interface StudentSecondaryMapper {
+public interface StudentPrimaryMapper {
 
     @Select("SELECT * FROM sbt_student WHERE NAME = #{name}")
     Student findByName(@Param("name") String name);
@@ -19,6 +19,9 @@ public interface StudentSecondaryMapper {
 
     @Delete("DELETE FROM sbt_student")
     int deleteAll();
+
+    @Delete("DELETE FROM sbt_student WHERE NAME = #{name}")
+    int deleteByName(@Param("name") String name);
 
     @Results({
             @Result(property = "id", column = "ID"),

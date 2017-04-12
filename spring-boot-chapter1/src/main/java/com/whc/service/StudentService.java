@@ -18,4 +18,6 @@ public interface StudentService {
     List<Student> getAll();
 
     int deleteAll();
+
+    void testTransaction(Student student);
 }

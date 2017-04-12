@@ -4,9 +4,13 @@ import com.whc.model.Student;
 import com.whc.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,5 +48,12 @@ public class StudentJdbcTemplatePrimaryServiceImpl implements StudentService {
 
     public int deleteAll() {
         return jdbcTemplate.update("DELETE FROM sbt_student");
+    }
+
+    @Transactional(transactionManager = "primaryDataSourceTransactionManager", propagation = Propagation.REQUIRED)
+    public void testTransaction(Student student) {
+        deleteByName(student.getName());
+        create(student);
+        deleteByName(student.getName());
     }
 }

@@ -1,9 +1,5 @@
 package com.whc;
 
-import com.whc.dao.jpa.primary.StudentJpaPrimaryRepository;
-import com.whc.dao.jpa.secondary.StudentJpaSecondaryRepository;
-import com.whc.dao.mapper.primary.StudentPrimaryMapper;
-import com.whc.dao.mapper.secondary.StudentSecondaryMapper;
 import com.whc.dao.mongo.StudentMongoRepository;
 import com.whc.model.Student;
 import com.whc.service.RedisCacheService;
@@ -21,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -45,12 +40,6 @@ public class Chapter1ApplicationTest {
     private StudentService studentJdbcTemplateSecondaryService;
 
     @Autowired
-    private StudentJpaPrimaryRepository studentJpaPrimaryRepository;
-
-    @Autowired
-    private StudentJpaSecondaryRepository studentJpaSecondaryRepository;
-
-    @Autowired
     private RedisCacheService<String, String> redisCacheService;
 
     @Autowired
@@ -59,19 +48,9 @@ public class Chapter1ApplicationTest {
     @Autowired
     private StudentMongoRepository studentMongoRepository;
 
-    @Autowired
-    private StudentPrimaryMapper studentPrimaryMapper;
-
-    @Autowired
-    private StudentSecondaryMapper studentSecondaryMapper;
-
     @Before
     public void setUp() throws Exception {
         mvc = MockMvcBuilders.standaloneSetup(new HelloController()).build();
-
-        studentJdbcTemplatePrimaryService.deleteAll();
-
-        studentJpaSecondaryRepository.deleteAll();
     }
 
     @Test
@@ -82,8 +61,10 @@ public class Chapter1ApplicationTest {
     }
 
     @Test
-    @Transactional(transactionManager = "secondaryDataSourceTransactionManager")
     public void testJDBC() {
+
+        studentJdbcTemplatePrimaryService.deleteAll();
+        studentJdbcTemplateSecondaryService.deleteAll();
 
         studentJdbcTemplatePrimaryService.create(new Student("张三", 20, 0, new Date(), new Date()));
         studentJdbcTemplatePrimaryService.create(new Student("李四", 20, 0, new Date(), new Date()));
@@ -91,7 +72,7 @@ public class Chapter1ApplicationTest {
         Assert.assertEquals(3, studentJdbcTemplatePrimaryService.getAll().size());
 
         studentJdbcTemplateSecondaryService.create(new Student("张三", 20, 0, new Date(), new Date()));
-        studentJdbcTemplateSecondaryService.create(new Student("李四", 20, null, new Date(), new Date()));
+        studentJdbcTemplateSecondaryService.create(new Student("李四", 20, 0, new Date(), new Date()));
         studentJdbcTemplateSecondaryService.create(new Student("王五", 20, 0, new Date(), new Date()));
         Assert.assertEquals(3, studentJdbcTemplateSecondaryService.getAll().size());
 
@@ -100,20 +81,9 @@ public class Chapter1ApplicationTest {
     }
 
     @Test
-    @Transactional("transactionManagerSecondary")
-    public void testJPA() {
-        studentJpaPrimaryRepository.save(new Student("张三", 20, 0, new Date(), new Date()));
-        studentJpaPrimaryRepository.save(new Student("李四", 20, 0, new Date(), new Date()));
-        studentJpaPrimaryRepository.save(new Student("王五", 20, 0, new Date(), new Date()));
-        Assert.assertEquals(3, studentJpaPrimaryRepository.findAll().size());
-
-        studentJpaSecondaryRepository.save(new Student("张三", 20, 0, new Date(), new Date()));
-        studentJpaSecondaryRepository.save(new Student("李四", 20, 0, new Date(), new Date()));
-        studentJpaSecondaryRepository.save(new Student("王五", 20, 0, new Date(), new Date()));
-        Assert.assertEquals(3, studentJpaSecondaryRepository.findAll().size());
-
-        studentJpaSecondaryRepository.deleteByName("张三");
-        Assert.assertEquals(2, studentJpaSecondaryRepository.findAll().size());
+    public void testTransaction() {
+        studentJdbcTemplatePrimaryService.testTransaction(new Student("张三", 20, 0, new Date(), new Date()));
+        studentJdbcTemplateSecondaryService.testTransaction(new Student("张三", 20, null, new Date(), new Date()));
     }
 
     @Test
@@ -136,30 +106,5 @@ public class Chapter1ApplicationTest {
 
         Assert.assertEquals(2, studentMongoRepository.findByName("李四").getId().intValue());
     }
-
-    @Test
-    public void testMyBatis() {
-
-        studentPrimaryMapper.deleteAll();
-        studentPrimaryMapper.insert(new Student("张三", 20, 0, new Date(), new Date()));
-        studentPrimaryMapper.insert(new Student("李四", 20, 0, new Date(), new Date()));
-        studentPrimaryMapper.insert(new Student("王五", 20, 0, new Date(), new Date()));
-        Assert.assertEquals(3, studentPrimaryMapper.selectAll().size());
-
-        studentSecondaryMapper.deleteAll();
-        studentSecondaryMapper.insert(new Student("张三", 20, 0, new Date(), new Date()));
-        studentSecondaryMapper.insert(new Student("李四", 20, 0, new Date(), new Date()));
-        studentSecondaryMapper.insert(new Student("王五", 20, 0, new Date(), new Date()));
-        Assert.assertEquals(3, studentSecondaryMapper.selectAll().size());
-
-    }
-
-
-
-
-
-
-
-
 
 }

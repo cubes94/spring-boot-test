@@ -106,6 +106,8 @@
 	<!-- Maven Modules -->
 	<modules>
 		<module>spring-boot-chapter1</module>
+		<module>spring-boot-chapter2</module>
+		<module>spring-boot-chapter3</module>
 	</modules>
 
 	<build>
