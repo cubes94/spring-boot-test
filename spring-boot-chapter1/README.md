@@ -4,5 +4,5 @@
     Freemarker
 2. Swagger2
 3. Exception
-4. JDBC (多数据源、事务)
+4. JDBC (multi-datasource)
 5. redis

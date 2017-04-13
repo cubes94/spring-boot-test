@@ -1,2 +1,2 @@
 # spring-boot-chapter2
-1. JPA (多数据源、事务)
+1. JPA (multi-datasource)
