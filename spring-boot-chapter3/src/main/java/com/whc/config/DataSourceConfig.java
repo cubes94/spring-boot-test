@@ -22,7 +22,6 @@ public class DataSourceConfig {
     Logger LOGGER = LoggerFactory.getLogger(DataSourceConfig.class);
 
     @Bean(name = "primaryDataSource")
-    @Qualifier("primaryDataSource")
     @Primary
     @ConfigurationProperties(prefix="spring.datasource.primary")
     public DataSource primaryDataSource() {
@@ -31,7 +30,6 @@ public class DataSourceConfig {
     }
 
     @Bean(name = "secondaryDataSource")
-    @Qualifier("secondaryDataSource")
     @ConfigurationProperties(prefix="spring.datasource.secondary")
     public DataSource secondaryDataSource() {
         LOGGER.info("-----------------CREATE secondaryDataSource----------------");

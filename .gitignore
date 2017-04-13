@@ -6,3 +6,5 @@
 .idea
 /bin/
 .externalToolBuilders/
+*.log
+*.epoch
