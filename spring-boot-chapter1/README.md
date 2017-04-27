@@ -6,3 +6,4 @@
 3. Exception
 4. JDBC (multi-datasource)
 5. redis
+6. MongoDB
