@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,9 @@ public class Chapter2ApplicationTest {
     @Autowired
     @Qualifier("studentJpaSecondaryService")
     private StudentService studentJpaSecondaryService;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Test
     @Transactional("transactionManagerSecondary")
@@ -58,5 +62,22 @@ public class Chapter2ApplicationTest {
     public void testTransaction() {
         studentJpaPrimaryService.testTransaction(new Student("张三", 20, 0, new Date(), new Date()));
         studentJpaSecondaryService.testTransaction(new Student("张三", 20, null, new Date(), new Date()));
+    }
+
+    @Test
+    public void testCache() {
+        studentJpaPrimaryRepository.deleteAll();
+        studentJpaSecondaryRepository.deleteAll();
+
+        studentJpaPrimaryRepository.save(new Student("张三", 20, 0, new Date(), new Date()));
+
+        Student s1 = studentJpaPrimaryRepository.findByName("张三");
+        System.out.println(s1);
+        Student s2 = studentJpaPrimaryRepository.findByName("张三");
+        System.out.println(s2);
+        s1.setAge(30);
+        studentJpaPrimaryRepository.save(s1);
+        Student s3 = studentJpaPrimaryRepository.findByName("张三");
+        System.out.println(s3);
     }
 }

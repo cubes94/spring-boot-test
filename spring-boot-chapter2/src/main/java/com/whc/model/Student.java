@@ -1,6 +1,7 @@
 package com.whc.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,7 +9,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "sbt_student")
-public class Student{
+public class Student implements Serializable {
+
+    private static final long serialVersionUID = -2013495207407539906L;
 
     @Id
     @GeneratedValue
@@ -103,5 +106,17 @@ public class Student{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }
