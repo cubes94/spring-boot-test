@@ -161,6 +161,7 @@
 		<module>spring-boot-chapter4</module>
 		<module>spring-boot-chapter5</module>
 		<module>spring-boot-chapter6</module>
+		<module>spring-boot-chapter7</module>
 	</modules>
 
 	<build>
