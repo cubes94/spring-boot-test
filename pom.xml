@@ -121,6 +121,11 @@
 				<version>${spring.boot.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.statemachine</groupId>
+				<artifactId>spring-statemachine-core</artifactId>
+				<version>1.2.5.RELEASE</version>
+			</dependency>
+			<dependency>
 				<groupId>com.atomikos</groupId>
 				<artifactId>transactions-jta</artifactId>
 				<version>3.9.3</version>
@@ -168,6 +173,7 @@
 		<module>spring-boot-chapter6</module>
 		<module>spring-boot-chapter7</module>
         <module>spring-boot-chapter8</module>
+        <module>spring-boot-chapter9</module>
     </modules>
 
 	<build>
