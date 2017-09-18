@@ -15,6 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot.version>1.5.2.RELEASE</spring.boot.version>
+		<webmagic.version>0.7.2</webmagic.version>
 	</properties>
 
 	<!-- Custom dependency -->
@@ -150,6 +151,16 @@
 				<artifactId>ehcache</artifactId>
 				<version>2.10.4</version>
 			</dependency>
+			<dependency>
+				<groupId>us.codecraft</groupId>
+				<artifactId>webmagic-core</artifactId>
+				<version>${webmagic.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>us.codecraft</groupId>
+				<artifactId>webmagic-extension</artifactId>
+				<version>${webmagic.version}</version>
+			</dependency>
 
 			<!-- Override Spring Data release train provided by Spring Boot -->
 			<dependency>
@@ -174,6 +185,7 @@
 		<module>spring-boot-chapter7</module>
         <module>spring-boot-chapter8</module>
         <module>spring-boot-chapter9</module>
+        <module>spring-boot-chapter10</module>
     </modules>
 
 	<build>
